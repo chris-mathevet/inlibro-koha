@@ -1,0 +1,120 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<!-- Head-->
+<title>Koha: Theme Plugin</title>
+<link rel="stylesheet" type="text/css" href="/api/v1/contrib/[% api_namespace | uri %]/static/css/homeTheme.css">
+[% INCLUDE 'doc-head-close.inc' %]
+
+<!-- Body-->
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+    <a href="/cgi-bin/koha/plugins/plugins-home.pl">Plugins</a> &rsaquo;
+    Carousel
+</div>
+
+<div id="doc3">
+    <div id="content" class="theme-plugin-wrapper">
+
+        <div id="inlibro-header">
+            <p>This extension was created by</p>
+            <img src='/api/v1/contrib/[% api_namespace | uri %]/static/images/inLibro_fr.svg' alt="inLibro" id="imgInlibro" />
+            <p class="website">Visit our <a href="https://inlibro.com">website</a> for more Koha extensions</p>
+        </div>
+
+        <div class="plugin-card">
+            <h1>Seasonal Themes Plugin</h1>
+            <p>
+                This plugin allows you to add seasonal themes to Koha's OPAC, such as Christmas, Halloween, or Valentine's Day.<br>
+                You can also customize some visual effects for each active theme.
+            </p>
+
+            <hr>
+            <h2>Select an OPAC Theme</h2>
+
+           <form id="theme-form" method="post" action="javascript:void(0)">
+            
+                 <input type="hidden" name="koha_session" value="[% koha.sessionID | html %]">
+                <input type="hidden" name="plugin_name" value="OpacTheme">
+                <input type="hidden" name="class" value="Koha::Plugin::OpacTheme">
+                <input type="hidden" name="method" value="apply_theme">
+                <input type="hidden" name="action" value="apply_theme">
+
+                <label for="theme-select"><strong>Theme:</strong></label>
+                    <select id="theme-select" name="theme">
+                        <option value="null" [% IF selected_theme == 'null' %]selected[% END %]>None</option>
+                        <option value="noel" [% IF selected_theme == 'noel' %]selected[% END %]>Christmas</option>
+                        <option value="halloween" [% IF selected_theme == 'halloween' %]selected[% END %]>Halloween</option>
+                        <option value="saint-valentin" [% IF selected_theme == 'saint-valentin' %]selected[% END %]>Valentine's Day</option>
+                    </select>
+
+            
+                <br><br><br>
+
+                <div id="noel-options" class="form-group">
+                    <label for="vitesse_flocon">Snow speed:</label>
+                    <select id="vitesse_flocon" name="vitesse_flocon">
+                        <option value="slow" [% IF vitesse_flocon == 'slow' %]selected[% END %]>Slow</option>
+                        <option value="normal" [% IF vitesse_flocon == 'normal' %]selected[% END %]>Normal</option>
+                        <option value="quick" [% IF vitesse_flocon == 'quick' %]selected[% END %]>Fast</option>
+                    </select>
+                <br><br>
+                    <label for="taille_locons">Flake size:</label>
+                    <select id="taille_flocons" name="taille_flocons">
+                        <option value="small" [% IF taille_flocons == 'small' %]selected[% END %]>Small</option>
+                        <option value="normal" [% IF taille_flocons == 'normal' %]selected[% END %]>Normal</option>
+                        <option value="big" [% IF taille_flocons == 'big' %]selected[% END %]>Big</option>
+                    </select>
+                <br><br>
+                    <label for="vent_flocons">Wind:</label>
+                    <select id="vent_flocons" name="vent_flocons">
+                        <option value="null" [% IF vent_flocons == 'null' %]selected[% END %]>None</option>
+                        <option value="normal" [% IF vent_flocons == 'normal' %]selected[% END %]>Normal</option>
+                        <option value="alot" [% IF vent_flocons == 'alot' %]selected[% END %]>A lot</option>
+                    </select>
+                </div>
+
+
+                <div id="stValentin_options" class="form-group">
+                    <label for="vitesse_coeurs">Heart speed:</label>
+                    <select id="vitesse_coeurs" name="vitesse_coeurs">
+                        <option value="slow" [% IF vitesse_coeurs == 'slow' %]selected[% END %]>Slow</option>
+                        <option value="normal" [% IF vitesse_coeurs == 'normal' %]selected[% END %]>Normal</option>
+                        <option value="quick" [% IF vitesse_coeurs == 'quick' %]selected[% END %]>Fast</option>
+                    </select>
+                <br><br>
+                    <label for="taille_coeurs">Heart size:</label>
+                    <select id="taille_coeurs" name="taille_coeurs">
+                        <option value="small" [% IF taille_coeurs == 'small' %]selected[% END %]>Small</option>
+                        <option value="normal" [% IF taille_coeurs == 'normal' %]selected[% END %]>Normal</option>
+                        <option value="big" [% IF taille_coeurs == 'big' %]selected[% END %]>Big</option>
+                    </select>
+                <br><br>
+                    <label for="vent_coeurs">Wind:</label>
+                    <select id="vent_coeurs" name="vent_coeurs">
+                        <option value="null" [% IF vent_coeurs == 'null' %]selected[% END %]>None</option>
+                        <option value="normal" [% IF vent_coeurs == 'normal' %]selected[% END %]>Normal</option>
+                        <option value="alot" [% IF venvent_coeurst_heart == 'alot' %]selected[% END %]>A lot</option>
+                    </select>
+                </div>
+                
+
+                <br><br>
+               <button type="submit" class="modern-button">Apply Theme</button>
+               <p id="success-message" style="display: none; color: green; font-weight: bold; margin-top: 1em;">
+                    ✅ Theme applied successfully!
+                </p>
+                <p id="erreur-message" style="display: none; color: red; font-weight: bold; margin-top: 1em;">
+                    ❌ An error occurred while applying the theme. :(
+                </p>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="/api/v1/contrib/[% api_namespace | uri %]/static/js/homeTheme.js" defer></script>
+
+<!-- Footer-->
+[% INCLUDE 'intranet-bottom.inc' %]

@@ -1,30 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // 1. Injecter le HTML pour les lumière de noel dans le footer
-    var navbarCollapse = document.querySelector('footer#changelanguage .collapse.navbar-collapse');
-    if (navbarCollapse) {
-        var container = document.createElement('div');
-        container.className = 'lightcontainer';
-
-        var ul = document.createElement('ul');
-        ul.className = 'lightrope';
-        ul.innerHTML = `
-            <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-            <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-            <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-        `;
-
-        container.appendChild(ul);
-        navbarCollapse.appendChild(container);
-    }
-
     
-    // 2. Script des flocons de neige (coeur)
-    var options = window.NoelThemeOptions || {};
+    // 2. Script des coeurs
+    var options = window.StValentinThemeOptions || {};
     var vitesse = options.vitesse || 'normal';  
     var taille = options.taille || 'normal';   
     var vent = options.vent || 'null';   
-    var activation = options.activation_flocons || "on";
-    var quantite = parseInt(options.quantite_flocons) || 10;
+    var activation = options.activation_coeurs || "on";
+    var quantite = parseInt(options.quantite_coeurs) || 10;
      console.log(vent);
 
     var vitesseCoeff = 0.1; 
@@ -41,41 +23,42 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var ventCoeff = 0; 
     switch(vent) {
-        case 'normal': ventCoeff = 1; break;
-        case 'alot': ventCoeff = 3; break;
+        case 'normal': ventCoeff = 2; break;
+        case 'alot': ventCoeff = 4; break;
     }
     console.log(ventCoeff);
 
-    var coeur = (function() {
+    var Flocon = (function() {
         var flakes;
         var flakesTotal = quantite;
         var wind = ventCoeff;
         var mouseX = 0;
         var mouseY = 0;
 
-        function coeur(size, x, y, vx, vy) {
-            this.size = size;
-            this.x = x;
-            this.y = y;
-            this.vx = vx;
-            this.vy = vy;
-            this.hit = false;
-            this.melt = false;
-            this.div = document.createElement('div');
-            this.div.classList.add('coeur');
-            this.div.style.width = this.size + 'px';
-            this.div.style.height = this.size + 'px';
-            this.div.style.position = 'fixed';
-            this.div.style.top = '0';
-            this.div.style.left = '0';
-            this.div.style.pointerEvents = 'none';
-            this.div.style.zIndex = '9999';
-            this.div.style.background = 'white'; 
-            this.div.style.borderRadius = '50%';
-            this.div.style.opacity = '0.8';
-        }
+       function Flocon(size, x, y, vx, vy) {
+    this.size = size;
+    this.x = x;
+    this.y = y;
+    this.vx = vx;
+    this.vy = vy;
+    this.hit = false;
+    this.melt = false;
+    this.div = document.createElement('div');
+    this.div.classList.add('Flocon');
+    this.div.style.width = this.size + 'px';
+    this.div.style.height = this.size + 'px';
+    this.div.style.position = 'fixed';
+    this.div.style.top = '0';
+    this.div.style.left = '0';
+    this.div.style.pointerEvents = 'none';
+    this.div.style.zIndex = '9999';
+    this.div.style.background = 'none';
+    this.div.style.fontSize = this.size + 'px';
+    this.div.style.color = '#e91e63';
+    this.div.style.opacity = '0.9';
+}
 
-        coeur.prototype.move = function() {
+        Flocon.prototype.move = function() {
             if (this.hit) {
                 if (Math.random() > 0.995) this.melt = true;
             } else {
@@ -99,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
             this.hit = !this.melt && this.y < mouseY && dx * dx + dy * dy < 2400;
         };
 
-        coeur.prototype.draw = function() {
+        Flocon.prototype.draw = function() {
             this.div.style.transform =
             this.div.style.MozTransform =
             this.div.style.webkitTransform =
@@ -115,11 +98,11 @@ document.addEventListener('DOMContentLoaded', function() {
             requestAnimationFrame(update);
         }
 
-        coeur.init = function(container) {
+        Flocon.init = function(container) {
             flakes = [];
             for (var i = flakesTotal; i--;) {
                 var size = (Math.random() + 0.2) * tailleCoeff + 1;
-                var flake = new coeur(
+                var flake = new Flocon(
                     size,
                     Math.random() * window.innerWidth,
                     Math.random() * window.innerHeight,
@@ -137,10 +120,9 @@ document.addEventListener('DOMContentLoaded', function() {
             update();
         };
 
-        return coeur;
+        return Flocon;
     }());
-
     if(activation === "on"){
-         coeur.init(document.body);
+         Flocon.init(document.body);
     }
 });

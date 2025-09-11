@@ -280,3 +280,11 @@ breadcrumb a,
 #hierarchies a.jstree-anchor.jstree-hovered {
   color: #B71C1C !important;
 }
+
+.main{
+  background-color: #fdf7f7;
+}
+
+.tab-content, .form-select, .form-control{
+  background-color: #FAEAEA;
+}

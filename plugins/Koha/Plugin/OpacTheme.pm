@@ -1,19 +1,20 @@
-package Koha::Plugin::NoelTheme;
+package Koha::Plugin::OpacTheme;
 use Modern::Perl;
 use base qw(Koha::Plugins::Base);
 use C4::Context;
 use URI::Escape;
 use JSON;
 use Koha::Plugins;
+use C4::Languages;
 
 our $VERSION = '1.0';
 our $metadata = {
-    name   => 'NoelTheme',
+    name   => 'OpacTheme',
     author => 'Ludovic Julien',
-    description => 'Ajouter des theme saisonnier dans l’OPAC',
+    description => 'Ajouter des themes saisonnier dans l’OPAC',
     date_authored => '2025-09-09',
     version => $VERSION,
-     minimum_version => '22.05.00',
+    minimum_version => '22.05.00',
 };
 
 sub new {
@@ -34,79 +35,163 @@ sub static_routes {
     return $spec;
 }
 
+#envoie le css a l'OPAC
 sub opac_head {
     my ($self) = @_;
     my $api_ns = $self->api_namespace;
 
-    my $theme = $self->retrieve_data("selected_theme") // {};
+    my $theme = $self->retrieve_data("selected_theme") // 'noel';
     return qq{
-        <link rel="stylesheet" href="/api/v1/contrib/$api_ns/static/css/$theme.css" />
+        <link id="theme-css" rel="stylesheet" href="/api/v1/contrib/$api_ns/static/css/$theme.css" />
     };
 }
 
+#envoie le js a l'OPAC
 sub opac_js {
     my ($self) = @_;
     my $api_ns = $self->api_namespace;
 
-    my $theme = $self->retrieve_data("selected_theme") // {};
-    return "" if $theme eq 'stvalentin';
+    my $theme = $self->retrieve_data("selected_theme") // 'noel';
+
+    return "" if $theme eq 'null';
+
+    my $script_options = "";
+
+    if ($theme eq 'noel') {
+        my $activation_flocons = $self->retrieve_data("activation_flocons") // 'on';
+        my $vitesse = $self->retrieve_data("neige_vitesse") // 'normal';
+        my $taille  = $self->retrieve_data("taille_flocons") // 'normal';
+        my $vent    = $self->retrieve_data("vent_flocons")   // 'null';
+        my $quantite_flocons    = $self->retrieve_data("quantite_flocons")   // '50';
+
+        $script_options = qq{
+            <script>
+                window.NoelThemeOptions = {
+                    activation_flocons: "$activation_flocons",
+                    vitesse: "$vitesse",
+                    taille: "$taille",
+                    vent: "$vent"
+                    quantite_flocons: "$quantite_flocons"
+                };
+            </script>
+        };
+    }
+    elsif ($theme eq 'saint-valentin') {
+        my $activation_coeurs = $self->retrieve_data("activation_coeurs") // 'on';
+        my $vitesse = $self->retrieve_data("heart_vitesse") // 'normal';
+        my $taille  = $self->retrieve_data("taille_heart")  // 'normal';
+        my $vent    = $self->retrieve_data("vent_heart")    // 'null';
+        my $quantite_coeurs    = $self->retrieve_data("quantite_coeurs")    // '50';
+
+        $script_options = qq{
+            <script>
+                window.StValentinThemeOptions = {
+                    activation_coeurs: "$activation_coeurs",
+                    vitesse: "$vitesse",
+                    taille: "$taille",
+                    vent: "$vent"
+                    quantite_coeurs: "$quantite_coeurs"
+                };
+            </script>
+        };
+    }
 
     return qq{
-        <script src="/api/v1/contrib/$api_ns/static/js/$theme.js"></script>
+        $script_options
+        <script id="theme-js" src="/api/v1/contrib/$api_ns/static/js/$theme.js"></script>
     };
 }
 
+
+# Enregistre les sélections de theme dans la BD
+# sub apply_theme {
+#     my ($self) = @_; 
+#     my $cgi = $self->{cgi};  
+
+#     my $theme   = $cgi->param('theme');
+#     my $vitesse = $cgi->param('vitesse_flocons');
+#     my $taille  = $cgi->param('taille_flocons');
+#     my $vent    = $cgi->param('vent_flocons');
+
+#     $self->store_data({
+#         selected_theme  => $theme,
+#         vitesse_flocons   => $vitesse,
+#         taille_flocons  => $taille,
+#         vent_flocons    => $vent
+#     }, { flatten => 0 });
+
+#     print $cgi->header('application/json');
+#     print JSON::to_json({
+#         success => JSON::true,
+#         message => "Thème '$theme' appliqué avec succès",
+#         theme   => $theme,
+#         vitesse => $vitesse,
+#         taille  => $taille,
+#     });
+#     print to_json({ success => 1, theme => $theme });
+# }
 sub apply_theme {
     my ($self) = @_; 
     my $cgi = $self->{cgi};  
 
-    my $theme   = $cgi->param('theme');
-    my $vitesse = $cgi->param('neige_vitesse');
-    my $taille  = $cgi->param('taille_flocons');
+    my $theme = $cgi->param('theme');
+    my %data = ( selected_theme => $theme );
 
-    $self->store_data({
-        selected_theme  => $theme,
-        neige_vitesse   => $vitesse,
-        taille_flocons  => $taille,
-    }, { flatten => 0 });
+    if ($theme eq 'noel') {
+        $data{activation_flocons}   = $cgi->param('activation_flocons')  // 'on';
+        $data{vitesse_flocons}   = $cgi->param('vitesse_flocons')  // 'normal';
+        $data{taille_flocons}  = $cgi->param('taille_flocons') // 'normal';
+        $data{vent_flocons}    = $cgi->param('vent_flocons')   // 'null';
+        $data{quantite_flocons}    = $cgi->param('quantite_flocons')   // '50';
+    }
+    elsif ($theme eq 'saint-valentin') {
+        $data{activation_coeurs}   = $cgi->param('activation_coeurs')  // 'on';
+        $data{vitesse_coeurs}   = $cgi->param('vitesse_coeurs')  // 'normal';
+        $data{taille_coeurs}    = $cgi->param('taille_coeurs')   // 'normal';
+        $data{vent_coeurs}      = $cgi->param('vent_coeurs')     // 'null';
+        $data{quantite_coeurs}      = $cgi->param('quantite_coeurs')     // '50';
+    }
+
+    $self->store_data(\%data, { flatten => 0 });
 
     print $cgi->header('application/json');
-    print JSON::to_json({
-        success => JSON::true,
-        message => "Thème '$theme' appliqué avec succès",
-        theme   => $theme,
-        vitesse => $vitesse,
-        taille  => $taille,
-    });
-    print to_json({ success => 1, theme => $theme });
+    print to_json({ success => JSON::true, theme => $theme });
 }
 
-sub opac_public {
-    my ($self) = @_;
-    warn "OPAC BOTTOM APPELER ";
-    my $data = $self->retrieve_data() // {};
-    my $theme = $data->{"selected_theme"} || 'noel';
+#Sélectionne le bon template de config celon la langue de l'utilisateur
+sub retrieve_template {
+    my ( $self, $template_prefix ) = @_;
+    my $cgi = $self->{cgi};
 
-    return '' unless $theme eq 'noel';
+    my $template;
+    my $preferredLanguage = C4::Languages::getlanguage();
 
-    return qq{
-      <ul class="lightrope">
-        <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-        <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>li></li><li></li><li></li><li></li>
-        <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-    </ul>
-    };
+    if ($preferredLanguage) {
+        eval {
+            $template = $self->get_template({ file => $template_prefix . '_' . $preferredLanguage . '.tt' });
+        };
+        if (!$template) {
+            $preferredLanguage = substr($preferredLanguage, 0, 2);
+            eval {
+                $template = $self->get_template({ file => $template_prefix . '_' . $preferredLanguage . '.tt' });
+            };
+        }
+    }
+
+    # fallback
+    $template = $self->get_template({ file => $template_prefix . '.tt' }) unless $template;
+
+    return $template;
 }
 
-
-# Bouton dans l'intranet
+# gère l'interface de l'intranet
 sub tool {
     my ($self, $args) = @_;
     my $cgi = $self->{cgi};
 
     my $koha_session = $cgi->cookie('KohaSession') // $cgi->param('koha_session');
 
-    my $template = $self->get_template({ file => 'homeTheme.tt' });
+    my $template = $self->retrieve_template('homeTheme');
 
     $template->param(
         enabled => 1,
@@ -114,6 +199,19 @@ sub tool {
         METHOD  => 'tool',
         api_namespace  => $self->api_namespace,
         koha_session => $koha_session, 
+        selected_theme => $self->retrieve_data("selected_theme") // 'null',
+
+        activation_flocons => $self->retrieve_data("activation_flocons") // 'on',
+        neige_vitesse  => $self->retrieve_data("neige_vitesse") // 'normal',
+        taille_flocons => $self->retrieve_data("taille_flocons") // 'normal',
+        vent_flocons   => $self->retrieve_data("vent_flocons") // 'null',
+        quantite_flocons   => $self->retrieve_data("quantite_flocons") // '50',
+
+        activation_coeurs => $self->retrieve_data("activation_coeurs") // 'on',
+        vitesse_coeurs  => $self->retrieve_data("vitesse_coeurs") // 'normal',
+        taille_coeurs => $self->retrieve_data("taille_coeurs") // 'normal',
+        vent_coeurs   => $self->retrieve_data("vent_coeurs") // 'null',
+        quantite_coeurs   => $self->retrieve_data("quantite_coeurs") // '50',
     );
 
     print $cgi->header(-type => 'text/html', -charset => 'utf-8');

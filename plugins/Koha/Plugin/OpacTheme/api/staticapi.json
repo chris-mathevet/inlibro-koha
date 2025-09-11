@@ -1,4 +1,55 @@
 {
+  "/css/homeTheme.css": {
+    "get": {
+      "x-mojo-to": "Static#get",
+      "operationId": "KohaPluginNoelTheme_staticGetCSSHomeTheme",
+      "tags": ["pluginStatic"],
+      "responses": {
+        "200": {
+          "description": "CSS OK",
+          "schema": {
+            "type": "file"
+          }
+        },
+        "400": {
+          "description": "Bad request",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "File not found",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
   "/css/noel.css": {
     "get": {
       "x-mojo-to": "Static#get",
@@ -101,6 +152,108 @@
       }
     }
   },
+  "/css/saint-valentin.css": {
+    "get": {
+      "x-mojo-to": "Static#get",
+      "operationId": "KohaPluginNoelTheme_staticGetCSSStValentin",
+      "tags": ["pluginStatic"],
+      "responses": {
+        "200": {
+          "description": "CSS OK",
+          "schema": {
+            "type": "file"
+          }
+        },
+        "400": {
+          "description": "Bad request",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "File not found",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+   "/js/homeTheme.js": {
+    "get": {
+      "x-mojo-to": "Static#get",
+      "operationId": "KohaPluginNoelTheme_staticGetJSHomeTheme",
+      "tags": ["pluginStatic"],
+      "responses": {
+        "200": {
+          "description": "JS OK",
+          "schema": {
+            "type": "file"
+          }
+        },
+        "400": {
+          "description": "Bad request",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "File not found",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
   "/js/noel.js": {
     "get": {
       "x-mojo-to": "Static#get",
@@ -156,6 +309,57 @@
     "get": {
       "x-mojo-to": "Static#get",
       "operationId": "KohaPluginNoelTheme_staticGetJSHalloween",
+      "tags": ["pluginStatic"],
+      "responses": {
+        "200": {
+          "description": "JS OK",
+          "schema": {
+            "type": "file"
+          }
+        },
+        "400": {
+          "description": "Bad request",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "File not found",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/js/saint-valentin.js": {
+    "get": {
+      "x-mojo-to": "Static#get",
+      "operationId": "KohaPluginNoelTheme_staticGetJSSaintValentin",
       "tags": ["pluginStatic"],
       "responses": {
         "200": {
