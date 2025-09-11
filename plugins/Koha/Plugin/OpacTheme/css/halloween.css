@@ -1,0 +1,43 @@
+/* 
+    Noel : couleurs personnalisées des composants 
+*/
+
+:root {
+  --bs-body-bg: #FAEAEA;
+}
+.nav {
+--bs-nav-link-color: #B71C1C;
+  --bs-nav-link-hover-color: #e44c59;
+}
+
+a {
+  color: #B71C1C;
+}
+
+a:hover,
+a:active,
+button:hover,
+button:active {
+  color: #e44c59;
+}
+
+.nav-link {
+  color: #B71C1C;
+}
+
+.nav-link:hover,
+.nav-link:focus {
+  color: #e44c59;
+}
+
+.btn-primary {
+  background-color: #ff5100;
+}
+
+.dt-button:hover,
+.close:hover,
+#members .dropdown-menu a:hover,
+breadcrumb a,
+#hierarchies a.jstree-anchor.jstree-hovered {
+  color: #B71C1C;
+}

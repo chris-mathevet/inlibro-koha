@@ -1,0 +1,239 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<!-- Head-->
+<title>Koha:Theme Plugin</title>
+[% INCLUDE 'doc-head-close.inc' %]
+
+<!-- Body-->
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo;
+    <a href="/cgi-bin/koha/plugins/plugins-home.pl">Plugins</a> &rsaquo;
+    Carrousel
+</div>
+
+<div id="doc3">
+    <div id="content" class="theme-plugin-wrapper">
+
+        <div id="inlibro-header">
+            <p>Cette extension a été créée par</p>
+            <img src='/api/v1/contrib/[% api_namespace | uri %]/static/images/inLibro_fr.svg' alt="inLibro" id="imgInlibro" />
+            <p class="right">Visitez notre <a href="https://inlibro.com">site web</a> pour d'autres extensions Koha</p>
+        </div>
+
+        <div class="plugin-card">
+            <h1>Plugin de Thèmes Saisonniers</h1>
+            <p>
+                Ce plugin vous permet d’ajouter des thèmes saisonniers à l’OPAC de Koha, comme Noël, Halloween ou la Saint-Valentin.<br>
+                Vous pouvez également personnaliser certains effets visuels pour chaque thème actif.
+            </p>
+
+            <hr>
+            <h2>Choisir un thème OPAC</h2>
+
+           <form id="theme-form" method="post" action="/cgi-bin/koha/plugins/run.pl/run.pl?Koha::Plugin::NoelTheme&method=apply_theme">
+                 <input type="hidden" name="koha_session" value="[% koha.sessionID | html %]">
+                <input type="hidden" name="plugin_name" value="NoelTheme">
+                <input type="hidden" name="class" value="Koha::Plugin::NoelTheme">
+                <input type="hidden" name="method" value="apply_theme">
+                <input type="hidden" name="action" value="apply_theme">
+
+                <label for="theme-select"><strong>Thème :</strong></label>
+                    <select id="theme-select" name="theme">
+                        <option value="noel" selected>Noël</option>
+                        <option value="halloween">Halloween</option>
+                        <option value="stvalentin">Saint-Valentin</option>
+                    </select>
+            
+                <br><br><br>
+
+                <div id="noel-options" class="form-group">
+                    <label for="neige-vitesse">Vitesse de la neige :</label>
+                    <select id="neige-vitesse" name="neige_vitesse">
+                        <option value="lent">Lent</option>
+                        <option value="normal" selected>Normal</option>
+                        <option value="rapide">Rapide</option>
+                    </select>
+                <br><br>
+                    <label for="taille-flocons">Taille des flocons :</label>
+                    <select id="taille-flocons" name="taille_flocons">
+                        <option value="petit">Petit</option>
+                        <option value="normal" selected>Normal</option>
+                        <option value="gros">Gros</option>
+                    </select>
+                </div>
+                
+
+                <br><br>
+               <button type="submit" class="modern-button"> Appliquer le thème</button>
+               <p id="success-message" style="display: none; color: green; font-weight: bold; margin-top: 1em;">
+                    ✅ Thème appliqué avec succès !
+                </p>
+                <p id="erreur-message" style="display: none; color: red; font-weight: bold; margin-top: 1em;">
+                    ❌ Une erreur est survenue lors de l'application du thème. :(
+                </p>
+
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Footer-->
+[% INCLUDE 'intranet-bottom.inc' %]
+
+<!-- JS dynamique -->
+<<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const themeSelect = document.getElementById('theme-select');
+    const noelOptions = document.getElementById('noel-options');
+    const form = document.getElementById('theme-form');
+    const successMessage = document.getElementById('success-message');
+    const erreurMessage = document.getElementById('erreur-message');
+
+    // Affiche ou cache les options de Noël
+    function updateThemeOptions() {
+        if (themeSelect.value === 'noel') {
+            noelOptions.style.display = 'block';
+        } else {
+            noelOptions.style.display = 'none';
+        }
+    }
+
+    updateThemeOptions();
+    themeSelect.addEventListener('change', updateThemeOptions);
+
+    form.addEventListener('submit', async function (event) {
+        event.preventDefault(); // On empêche la redirection
+
+        // Préparer les données du formulaire
+        const formData = new FormData(form);
+
+        // Effectuer l'appel AJAX à la méthode Perl
+        try {
+            const response = await fetch('/cgi-bin/koha/plugins/run.pl/run.pl?Koha::Plugin::NoelTheme&method=apply_theme', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                successMessage.style.display = 'block';
+
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 3000);
+            } else {
+               erreurMessage.style.display = 'block';
+
+                setTimeout(() => {
+                    erreurMessage.style.display = 'none';
+                }, 3000);
+            }
+        } catch (error) {
+            console.error(error);
+         erreurMessage.style.display = 'block';
+
+                setTimeout(() => {
+                    erreurMessage.style.display = 'none';
+                }, 3000);
+        }
+    });
+});
+</script>
+
+
+<!-- Style moderne -->
+<style>
+.theme-plugin-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 3em auto;
+    max-width: 700px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #333;
+}
+
+#inlibro-header {
+    text-align: center;
+    font-size: 14px;
+    color: #696969;
+    margin-bottom: 2em;
+}
+
+#inlibro-header img {
+    max-width: 100%;
+    height: auto;
+}
+
+#inlibro-header .right {
+    text-align: right;
+    font-size: 13px;
+}
+
+.plugin-card {
+    background: #f9f9f9;
+    padding: 2em;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    width: 100%;
+}
+
+.plugin-card h1 {
+    margin-top: 0;
+    font-size: 1.8em;
+    color: #2a6ebb;
+}
+
+.plugin-card p {
+    font-size: 1em;
+    margin-bottom: 1.5em;
+    line-height: 1.6em;
+}
+
+.form-group {
+    margin-bottom: 1.5em;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5em;
+    font-weight: 600;
+}
+
+select {
+    width: 100%;
+    padding: 0.5em;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#imgInlibro{
+    margin-bottom:10px;
+}
+.modern-button {
+    background-color: #2a6ebb;
+    color: white;
+    font-size: 1.1em;
+    padding: 0.75em 1.5em;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+}
+
+.modern-button:hover {
+    background-color: #1e5293;
+    transform: translateY(-2px);
+}
+
+.modern-button:active {
+    background-color: #174272;
+    transform: translateY(0);
+}
+
+</style>
