@@ -1,10 +1,15 @@
+/* 
+    section arraigner 
+*/
 .spider {
   position: absolute;
+  top: 0;
   height: 40px;
   width: 50px;
   border-radius: 50%;
   margin-top: 40px;
   background: #110D04;
+  margin-top: 0;
 }
 
 .spider::before {
@@ -80,7 +85,6 @@
   animation: legs-wriggle-right 1s 0.2s infinite;
 }
 
-/* Tu peux adapter ces sélecteurs pour :nth-child si nécessaire */
 .spider .leg:nth-of-type(2) {
   top: 14px;
   left: -11px;
@@ -112,7 +116,6 @@
   animation-delay: 0.3s;
 }
 
-/* Spiders positions and animations */
 .spider_0 { left: 5%; animation: spider-move-0 5s infinite; }
 .spider_1 { left: 20%; animation: spider-move-1 5s infinite; }
 .spider_2 { left: 35%; animation: spider-move-2 5s infinite; }
@@ -132,7 +135,7 @@
   50% { transform: rotate(-45deg) skewX(20deg); }
 }
 
-/* Exemples d’animations de mouvement (à adapter selon ton besoin) */
+
 @keyframes spider-move-0 {
   0%, 100% { margin-top: 100px; }
   50% { margin-top: 140px; }
@@ -145,43 +148,13 @@
   0%, 100% { margin-top: 120px; }
   50% { margin-top: 160px; }
 }
-/* etc. */
 
-h1 {
-  /* position: absolute;
-  left: 6%;
-  bottom: 12%; */
-  font-family: 'Eater', cursive;
-  /* font-size: 8.5vw; */
-  color: #111;
-  animation: flicker 4s infinite;
-}
-
-@keyframes flicker {
-  0%, 6%, 12% {
-    text-shadow: none;
-    color: #111;
-  }
-  3%, 9% {
-    text-shadow: 0 0 8px rgba(250,103,1,0.6);
-    color: #fa6701;
-  }
-  60%, 100% {
-    text-shadow:
-      0 0 8px rgba(250,103,1,0.6),
-      0 0 16px rgba(250,103,1,0.4),
-      0 0 20px rgba(255,0,84,0.2),
-      0 0 22px rgba(255,0,84,0.1);
-    color: #fa6701;
-  }
-}
-
-.web-right,
+/* .web-right,
 .web-left {
   position: absolute;
   height: 200px;
   width: auto;
-  top: -10px;
+  top: -1000px;
   z-index: -1;
   opacity: 0.2;
 }
@@ -193,26 +166,409 @@ h1 {
 .web-left {
   left: -10px;
   transform: rotate(-90deg);
+} */
+
+/* 
+    Section : Ghost cursor
+*/
+svg#ghost-filter,
+svg#ghost-filter * {
+  pointer-events: none !important;
+  z-index: -999 !important;
+}
+.ghost,
+.ghost * {
+  pointer-events: none !important;
+}
+.ghost {
+    z-index: 0 !important;
+  position: absolute;
+  z-index: 1;
+  transform-origin: center;
+  width: 90px;
+  margin: 20px 0 0 -45px;
+}
+
+.ghost__eyes,
+.ghost__mouth {
+  position: absolute;
+  z-index: 1;
+  width: 15px;
+  height: 15px;
+  top: 34px;
+  left: 50%;
+  transform: translate(-50%);
+  border-radius: 50px;
+  background: #161616;
+  margin-left: -20px;
+  transform-origin: center;
+}
+
+.ghost__eyes {
+  box-shadow: 40px 0 0 #161616;
+}
+
+.ghost__mouth {
+  margin: 0;
+  top: 60px;
+  transform: scale(0);
+  border-radius: 20px 20px 12px 12px;
+  width: 20px;
+  transform-origin: center bottom;
+  overflow: hidden;
+}
+
+.ghost__tail {
+  position: absolute;
+  z-index: -1;
+  top: 82px;
+  height: 55px;
+  width: 100%;
+  filter: url(#goo);
+}
+
+.ghost__tail::before {
+  content: '';
+  background: #fff;
+  position: absolute;
+  bottom: 35px;
+  left: 0;
+  height: 100px;
+  width: 100%;
+  border-radius: 40px 40px 5px 5px;
+}
+
+.ghost__rip {
+  width: 15px;
+  height: 28px;
+  background: #fff;
+  position: absolute;
+  top: 15px;
+  left: 0;
+  box-shadow:
+    -62px 0 0 #fff,
+    -31px 0 0 #fff,
+    31px 0 0 #fff,
+    62px 0 0 #fff,
+    93px 0 0 #fff;
+  border-radius: 50%;
+  animation: ghost-rips 1.2s linear infinite;
+}
+
+@keyframes ghost-rips {
+  0% {
+    left: 0;
+    top: 12px;
+  }
+  50% {
+    left: 31px;
+    top: 20px;
+  }
+  100% {
+    left: 62px;
+    top: 12px;
+  }
+}
+
+/* 
+    SECTION : Witches Brew
+*/
+#witch-brew {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  height: auto;
+  max-width: 810px;
+  width: 7vh;
+  
+  & svg {
+    height: auto;
+    width: 100%;
+  }
+}
+/* Bubbles - animation montée + disparition */
+@keyframes riseAndDisappear {
+  0% {
+    transform: translateY(70%);
+    opacity: 0;
+    scale: 1;
+  }
+   10% {
+    opacity: 1;
+  }
+  90% {
+    transform: translateY(0%);
+    opacity: 1;
+    scale: 1;
+  }
+  100% {
+    transform: translateY(-20%);
+    opacity: 0;
+    scale: 0;
+  }
+}
+
+.bubble {
+  position: relative;
+  z-index: 0;
+  transform-origin: 50% 50%;
+  animation: riseAndDisappear 3s ease-out infinite;
+  opacity: 0; 
+  animation-fill-mode: forwards; 
+  animation-delay: 0.1s;
+}
+
+.bubble--small {
+  animation-duration: 3.5s;
+}
+
+.bubble--red {
+  animation-delay: 2.4s;
+}
+
+.bubble--green {
+  animation-delay: 1.6s;
+}
+
+.bubble--blue {
+  animation-delay: 0.8s;
+}
+
+/* Bubbles group float animation */
+@keyframes floatGroup {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.bubble-group {
+  animation: floatGroup 1.4s ease-in-out infinite;
+}
+
+/* Drip animation */
+@keyframes drip {
+  0% {
+    transform: translateY(0) scaleY(1);
+  }
+  80% {
+    transform: translateY(192px) scaleY(1);
+  }
+  100% {
+    transform: translateY(192px) scaleY(0);
+  }
+}
+
+.drip {
+  transform-origin: 50% 100%;
+  animation: drip 3.5s ease-in infinite;
+}
+.drip--red {
+  animation-delay: 1.8s;
+}
+.drip--green {
+  animation-delay: 3s;
+}
+
+/* 
+    SECTION : Pumpkin
+*/
+:root {
+  --slice-width: 40%;
+  --slice-height: 70%;
+  --spaccing: 14%;
+  --container-width: 440px;
+  --pumpkin-color: #fe8717;
+}
+#pumpkin-left {
+  position: absolute;
+  bottom: 0;
+  left: 46%;
+  transform: translateX(-50%) translateX(-40px);
+  z-index: 1000;
+  height: 25px;
+  width: 25px;
+}
+#pumpkin-right{
+  position: absolute;
+  bottom: 0;
+   left: 54%;
+  transform: translateX(-50%) translateX(40px);
+  z-index: 1000;
+  height: 25px;
+  width: 25px;
+}
+.slice {
+  width: var(--slice-width);
+  height: var(--slice-height);
+  background: var(--pumpkin-color);
+  border-radius: 50% 50% 50% 50% / 46% 47% 53% 54%;
+  position: absolute;
+  top: calc((100% - var(--slice-height)) / 2 + 10%);
+  left: calc(50% - var(--slice-width) / 2);
+}
+.one {
+  left: calc(50% - (var(--slice-width) / 2) - 2 * var(--spaccing));
+}
+.two {
+  left: calc(50% - (var(--slice-width) / 2) - var(--spaccing));
+}
+.four {
+  left: calc(50% - (var(--slice-width) / 2) + var(--spaccing));
+}
+.five {
+  left: calc(50% - (var(--slice-width) / 2) + 2 * var(--spaccing));
+}
+.container {
+  border: 0px solid red;
+  text-align: center;
+  height: var(--container-width);
+  width: var(--container-width);
+  margin: 0 auto;
+  position: relative;
+}
+.stem-container {
+  width: 40%;
+  height: 40%;
+  left: 26%;
+  top: -1%;
+  position: absolute;
+  overflow: hidden;
+  transform: rotate(20deg);
+}
+.stem {
+  width: 100%;
+  height: 100%;
+  background: #8fbb49;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  border-radius: 50%;
+}
+.stem::after {
+  content: "";
+  width: 50%;
+  height: 50%;
+  background: white;
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  border-radius: 50%;
+}
+.eyes {
+  border: 0px solid red;
+  width: 100%;
+  height: 100%;
+}
+.eye {
+  border-radius: 0% 0% 50% 50% / 0% 0% 100% 100%;
+  width: 25%;
+  height: 10%;
+  background: black;
+  position: absolute;
+  top: 45%;
+  z-index: 12;
+}
+.left-eye {
+  left: 17%;
+  transform: rotate(28deg);
+}
+.right-eye {
+  right: 17%;
+  transform: rotate(-28deg);
+}
+.nose {
+  border-radius: 50% 50% 0% 0% / 100% 100% 0% 0%;
+  width: 10%;
+  height: 15%;
+  background: black;
+  position: absolute;
+  top: 50%;
+  left: 45%;
+  z-index: 10;
+}
+.nose::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 10%;
+  background: var(--pumpkin-color);
+  bottom: 0;
+  left: 0;
+  border-radius: 50% 50% 0% 0% / 100% 100% 0% 0%;
+  z-index: 10;
+}
+
+:root {
+  --mouth-width: 78%;
+  --mouth-heihgt: 34%;
+}
+.mouth {
+  border-radius: 0% 0% 50% 50% / 0% 0% 100% 100%;
+  width: var(--mouth-width);
+  height: var(--mouth-heihgt);
+  background: black;
+  position: absolute;
+  bottom: 10%;
+  left: calc((100% - var(--mouth-width)) / 2);
+}
+.mouth::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 40%;
+  background: var(--pumpkin-color);
+  top: 0;
+  left: 0;
+  border-radius: 0% 0% 50% 50% / 0 0 100% 100%;
+}
+
+.tooth {
+  width: 10%;
+  height: 20%;
+  top: 24%;
+  left: 12%;
+  transform: rotate(17deg) skew(-5deg, 0deg);
+  background: red;
+  background: var(--pumpkin-color);
+  position: absolute;
+}
+.tooth2 {
+  top: 73%;
+  left: 24%;
+  transform: rotate(12deg) skew(-5deg, 0deg);
+}
+
+.tooth3 {
+  top: 77%;
+  left: 63%;
+  transform: rotate(-17deg) skew(-5deg, 0deg);
+}
+
+.tooth4 {
+  top: 38%;
+  left: 39%;
+  transform: rotate(-3deg) skew(-5deg, 0deg);
+}
+
+.tooth5 {
+  top: 27%;
+  left: 79%;
+  transform: rotate(-19deg) skew(-1deg, 0deg);
 }
 
 
 
 /* 
-    ❄️ Flocons = apparence de chauves-souris ou feuilles mortes si personnalisé plus tard
-*/
-/* .snowflake {
-  background-image: radial-gradient(circle farthest-corner, rgba(255, 165, 0, 1) 40%, rgba(255, 165, 0, 0) 100%);
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.25);
-} */
-
-
-/*
-    🕸️ Couleurs générales du thème
+    Halloween : couleurs personnalisées des composants 
 */
 
 :root {
   --bs-body-bg: #353333;
-  --bs-body-color: #fff;
 }
 
 body {
@@ -243,41 +599,11 @@ button:active {
   color: #ffaa33;
 }
 
-
-/* .btn-default, .btn-primary {
-  --s: 28px;
-  
-  
-  background-image:
-    radial-gradient(circle at 30% 50%, orange 30%, transparent 31%),
-    radial-gradient(circle at 50% 50%, #ff8000 35%, transparent 36%),
-    radial-gradient(circle at 70% 50%, orange 30%, transparent 31%),
-    
-  
-    linear-gradient(to bottom, #4d3c0d 0 20%, transparent 21%),
-    
-    
-    repeating-linear-gradient(45deg, #1c1c1c 0 10%, #000 10% 20%);
-  
-  background-size: var(--s) var(--s);
-  background-repeat: repeat;
-
-  color: black !important;
-  font-weight: bold;
-  border: none;
-  border-radius: 6px;
-} */
-
-
-
 .btn-default:hover, .btn-primary:hover {
   color: #1c1c1c !important;
   background-color: #ffaa33 !important;
   border: 1px solid #fff;
 }
-
-
-/* 🕸️ Autres éléments */
 
 .dt-button:hover,
 .close:hover,
@@ -285,72 +611,154 @@ button:active {
 breadcrumb a,
 .dropdown-item,
 #hierarchies a.jstree-anchor.jstree-hovered {
-  color: #ffaa33 !important;
+  color: #fff9ef !important;
 }
 
 
-
-.btn-primary {
-  position: relative;
+.main{
+  background-color: #fff7f1;
+  border-radius: 20px;
 }
 
-.btn-primary::before,
-.btn-primary::after {
-  display: block;
-  content: '';
-  height: 20px;
-  width: 15px;
-  position: absolute;
-  opacity: 0;
-  transition: all 250ms ease-in-out;
-   z-index: 100; 
+.tab-content, .form-select, .form-control{
+  background-color: rgb(233, 233, 233);
 }
 
-.btn-primary:hover::before,
-.btn-primary:hover::after {
-  opacity: 1;
+.form-select:focus,
+.form-control:focus {
+    border: 2px solid #ffaa33; 
+    outline: none; 
 }
 
-.btn-primary:hover::before {
-  /* to avoid transition jank in chrome make sure transitions don't include transform */
-  height: 46px;
-  width: 34px;
-  right: -40px;
-  animation: float-right 3s ease-in-out infinite;
+h1 {
+  font-family: 'Eater', cursive;
+  color: #111;
+  animation: flicker 4s infinite;
 }
 
-.btn-primary:hover::after {
-  /* adjust according to size of ghost */
-  height: 40px;
-  width: 30px;
-  top: -45px;
-  transform: rotate(-10deg);
-  animation: float-top 3s ease-in-out infinite;
-}
-
-@keyframes float-right {
-  50% {
-    transform: rotate(10deg) translate(0, -15px);
+@keyframes flicker {
+  0%, 6%, 12% {
+    text-shadow: none;
+    color: #111;
+  }
+  3%, 9% {
+    text-shadow: 0 0 8px rgba(250,103,1,0.6);
+    color: #fa6701;
+  }
+  60%, 100% {
+    text-shadow:
+      0 0 8px rgba(250,103,1,0.6),
+      0 0 16px rgba(250,103,1,0.4),
+      0 0 20px rgba(255,0,84,0.2),
+      0 0 22px rgba(255,0,84,0.1);
+    color: #fa6701;
   }
 }
 
-@keyframes float-top {
-  50% {
-    transform: rotate(-5deg) translate(0, 10px);
-  }
+footer{
+  height: 60px;
 }
 
-.btn-primary::before {
-  /* right ghost */
-  right: 0;
-  bottom: 0;
-  background: url('data:image/svg+xml;charset=UTF8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="1742 35 735 948"><g fill="none" fill-rule="evenodd"><path fill="%23FFF" d="M2052.05 39.98c-10.07 1.2-19.85 3.97-29.69 6.34-8.44 2.19 74.98 3.97 66.82 7.11-36.96 12.18-71.94 30.4-103.05 53.79-73.46 54.63-124.66 137.83-141.31 227.77-6.86 40.15-11.48 80.86-10.36 121.65 1.75 75.91 19.77 151.74 54.62 219.34 2.41 4.14 4.02 8.64 6.06 12.95 15.09 23.61 25.44 50.32 29.74 78.03 8.73 53.72-9.2658 137.92-42.5558 180.89-3.84.98 3.3258 5.89 8.8058 6.74 29.87 10.22 166.94 7.5247 182.46 6.4647 15.75-1.22 91.55-17.2447 143.58-47.9047 12.63-7.95 25.52-15.58 37.37-24.67 8.19-6.1 16.34-12.25 24.44-18.47 27.26-22.61 52.84-47.41 75.04-75.06 51.81-63.17 88.5-138.48 107.44-217.89 13.79-56.78 18.28-115.76 13.79-174-.93-10.76-1.81-21.54-3.66-32.19-5.15-58.56-24.42-115.84-55.83-165.55-3.8-6.46-7.84-12.79-12.45-18.71-11.71-15.17-24.11-29.79-37.17-43.8-9.39-10.34-20.38-19.01-31.03-27.99-17.42-14.01-36.2-26.3-55.8-37.04-12.08-6.32-24.56-11.88-37.2-17.01-37.91-15.46-78.64-23.7-119.51-25.26-23.59-.72-47.27.48-70.55 4.47z"/></g></svg>') no-repeat;
+.form-select{
+  z-index: 1000;
 }
 
-.btn-primary::after {
-  /* top ghost */
-  top: 0;
-  left: 50%;
-  background: url('data:image/svg+xml;charset=UTF8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="12 15 713 940"><path fill="%23FFF" fill-rule="evenodd" d="M512.55 45.45c14.42 6.64 28.84 13.35 42.37 21.69 17.15 10 32.91 22.12 48.31 34.61 27.61 23.92 51.72 51.98 70.75 83.19 19.39 31.72 33.49 66.66 41.57 102.95 5.04 22.35 7.3 45.24 8.15 68.1-.06 151.66-.01 303.32-.02 454.98.1 5.63-.24 11.27.17 16.9 1.29 8.02-.66 16.07-2.1 23.93-8.22 38.75-34.91 73.24-70.8 90.14-22.36 11.06-48.14 15.17-72.84 11.85-25.79-2.59-50.28-14.23-69.78-31.12-12.09-9.98-21.62-22.77-29.05-36.51-19.52 36.18-57.22 62.02-98.14 66.54-6.69 1.07-13.47.44-20.2 1.02-22.82-.88-45.64-7.33-64.87-19.84-18.49-11.41-34.1-27.58-44.57-46.64-23.14 36.72-65.92 60.8-109.52 59.61-21.45.77 47.22-5.13 28.34-15.07-27.88-15.08-50.21-40.37-60.96-70.26-2.19-7.44-5.05-14.75-6.32-22.41-.1-108.03-.01-216.07-.04-324.1-.08-53.67.17-107.35-.17-161.02.45-20.26 2.6-40.49 6.65-60.35 3.26-16.5 8.28-32.61 13.69-48.51 21.75-59.51 60.55-112.51 110.27-151.73 52.51-41.63 89.586-40.54 156.146-47.95 62.86-7.24 64.874-25.06 122.964 0z"/></svg>') no-repeat;
-  transform-origin: center center;
+
+/* 
+    Bouton glitch
+*/
+/* From Uiverse.io by namecho */ 
+/* .btn-default,
+.btn-default::after {
+ padding: 16px 20px;
+ background: linear-gradient(45deg, transparent 5%, #ff5e01 5%);
+ border: 0;
+ color: black;
+ letter-spacing: 3px;
+ box-shadow: 6px 0px 0px #337e02;
+ outline: transparent;
+ position: relative;
 }
+
+.btn-default::after {
+ --slice-0: inset(50% 50% 50% 50%);
+ --slice-1: inset(80% -6px 0 0);
+ --slice-2: inset(50% -6px 30% 0);
+ --slice-3: inset(10% -6px 85% 0);
+ --slice-4: inset(40% -6px 43% 0);
+ --slice-5: inset(80% -6px 5% 0);
+ content: "HOVER ME";
+ display: block;
+ position: absolute;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ background: linear-gradient(45deg, transparent 3%, #00e6f6 3%, #00e6f6 5%, #ff013c 5%);
+ text-shadow: -3px -3px 0px #f8f005, 3px 3px 0px #00e6f6;
+ clip-path: var(--slice-0);
+}
+
+.btn-default:hover::after {
+ animation: 1s glitch;
+ animation-timing-function: steps(2, end);
+}
+
+@keyframes glitch {
+ 0% {
+  clip-path: var(--slice-1);
+  transform: translate(-20px, -10px);
+ }
+
+ 10% {
+  clip-path: var(--slice-3);
+  transform: translate(10px, 10px);
+ }
+
+ 20% {
+  clip-path: var(--slice-1);
+  transform: translate(-10px, 10px);
+ }
+
+ 30% {
+  clip-path: var(--slice-3);
+  transform: translate(0px, 5px);
+ }
+
+ 40% {
+  clip-path: var(--slice-2);
+  transform: translate(-5px, 0px);
+ }
+
+ 50% {
+  clip-path: var(--slice-3);
+  transform: translate(5px, 0px);
+ }
+
+ 60% {
+  clip-path: var(--slice-4);
+  transform: translate(5px, 10px);
+ }
+
+ 70% {
+  clip-path: var(--slice-2);
+  transform: translate(-10px, 10px);
+ }
+
+ 80% {
+  clip-path: var(--slice-5);
+  transform: translate(20px, -10px);
+ }
+
+ 90% {
+  clip-path: var(--slice-1);
+  transform: translate(-10px, 0px);
+ }
+
+ 100% {
+  clip-path: var(--slice-1);
+  transform: translate(0);
+ }
+}
+
+ */

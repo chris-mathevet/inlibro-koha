@@ -47,6 +47,7 @@
                         <option value="noel" [% IF selected_theme == 'noel' %]selected[% END %]>Christmas</option>
                         <option value="halloween" [% IF selected_theme == 'halloween' %]selected[% END %]>Halloween</option>
                         <option value="saint-valentin" [% IF selected_theme == 'saint-valentin' %]selected[% END %]>Valentine's Day</option>
+                         <option value="paque" [% IF selected_theme == 'paque' %]selected[% END %]>Easter</option>
                     </select>
 
             
@@ -119,14 +120,48 @@
                             <option value="normal" [% IF vent_coeurs == 'normal' %]selected[% END %]>Normal</option>
                             <option value="alot" [% IF venvent_coeurst_heart == 'alot' %]selected[% END %]>A lot</option>
                         </select>
-                    <br><br>
-                        <label for="quantite_coeurs">Quantity:</label>
+                    
+                        <label class="mt"for="quantite_coeurs">Quantity:</label>
                         <div class="range-wrapper">
                             <input type="range" class="styled-range" id="quantite_coeurs" name="quantite_coeurs" min="5" max="200" value="[% quantite_coeurs || 50 %]">
                             <span id="val_quantite_coeurs" class="range-value">[% quantite_coeurs || 50 %]</span>
                         </div>
                     </div>
                 </div>
+
+
+
+
+                <div id="halloween-options" class="form-group">
+                    <div class="toggle-container" id="toggle_halloween" style="display: none;">
+                        <label class="switch">
+                            <input type="checkbox" id="activation_spiders" name="activation_spiders" [% IF activation_spiders %]checked[% END %]>
+                            <span class="slider round"></span>
+                        </label>
+                        <span class="toggle-label">Enable spider effect</span>
+                    </div>
+
+                    <div id="halloween-config" style="margin-left: 20px; display: none;">
+                        <label for="quantite_spiders">Number of spiders:</label>
+                        <div class="range-wrapper">
+                            <input type="range" class="styled-range" id="quantite_spiders" name="quantite_spiders" min="1" max="6" value="[% quantite_spiders || 6 %]">
+                            <span id="val_quantite_spiders" class="range-value">[% quantite_spiders || 6 %]</span>
+                        </div>
+                    <br><br>
+                    <div class="toggle-container" id="toggle_halloween2">
+                        <label class="switch">
+                            <input type="checkbox" id="activation_ghost" name="activation_ghost" [% IF activation_ghost %]checked[% END %]>
+                            <span class="slider round"></span>
+                        </label>
+                        <span class="toggle-label"> Activer le fantôme du curseurt</span>
+                    </div>
+                    </div>
+                </div>
+
+
+
+
+            
                 
 
                 <br><br>
@@ -139,6 +174,7 @@
                 </p>
 
             </form>
+
         </div>
     </div>
 </div>

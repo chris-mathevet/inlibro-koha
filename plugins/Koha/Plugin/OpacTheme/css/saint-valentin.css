@@ -1,4 +1,4 @@
-.snowflake {
+.Coeur{
 	position: fixed;
 	display: block;
 	width: 20px;
@@ -12,7 +12,7 @@
 	color: #e91e63;
 }
 
-.snowflake::before {
+.Coeur::before {
 	content: '❤️';
 	display: block;
 	text-align: center;
@@ -54,7 +54,7 @@ button:active {
 }
 
 
-.btn-default, .btn-default:hover {
+.btn-default, .btn-default:hover, #loginModal input[type="submit"]:hover{
   --color: #faa7d8;
   background: 
     linear-gradient(45deg, var(--color) 25%, transparent 25%) -5px 0,
@@ -103,7 +103,9 @@ breadcrumb a,
   color: #C2185B !important;
 }
 
-
+.main{
+  border-radius: 20px;
+}
 
 
 

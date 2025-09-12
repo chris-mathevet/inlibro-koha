@@ -6,6 +6,10 @@ use URI::Escape;
 use JSON;
 use Koha::Plugins;
 use C4::Languages;
+use File::Slurp;
+use File::Basename;
+use Cwd 'abs_path';
+# use feature 'switch'
 
 our $VERSION = '1.0';
 our $metadata = {
@@ -35,15 +39,29 @@ sub static_routes {
     return $spec;
 }
 
-#envoie le css a l'OPAC
+#envoie le css a l'OPAC (en inline pour éviter le temps de chargement long)
 sub opac_head {
     my ($self) = @_;
-    my $api_ns = $self->api_namespace;
 
     my $theme = $self->retrieve_data("selected_theme") // 'noel';
-    return qq{
-        <link id="theme-css" rel="stylesheet" href="/api/v1/contrib/$api_ns/static/css/$theme.css" />
-    };
+
+    my $plugin_pm_path = abs_path(__FILE__);
+    my $plugin_dir = dirname($plugin_pm_path);
+
+
+    my $css_path = "$plugin_dir/OpacTheme/css/$theme.css";
+
+    if (-e $css_path) {
+        my $css_content = read_file($css_path, binmode => ':utf8'); #obligatoire pour lire l'emoji 
+        return qq{
+            <style id="theme-inline-css">
+            $css_content
+            </style>
+        };
+    } else {
+        warn "❌ CSS file not found at path: $css_path";
+        return '';
+    }
 }
 
 #envoie le js a l'OPAC
@@ -52,17 +70,16 @@ sub opac_js {
     my $api_ns = $self->api_namespace;
 
     my $theme = $self->retrieve_data("selected_theme") // 'noel';
-
     return "" if $theme eq 'null';
 
     my $script_options = "";
 
     if ($theme eq 'noel') {
         my $activation_flocons = $self->retrieve_data("activation_flocons") // 'on';
-        my $vitesse = $self->retrieve_data("neige_vitesse") // 'normal';
-        my $taille  = $self->retrieve_data("taille_flocons") // 'normal';
-        my $vent    = $self->retrieve_data("vent_flocons")   // 'null';
-        my $quantite_flocons    = $self->retrieve_data("quantite_flocons")   // '50';
+        my $vitesse = $self->retrieve_data("vitesse_flocons") // 'normal';
+        my $taille  = $self->retrieve_data("taille_flocons")  // 'normal';
+        my $vent    = $self->retrieve_data("vent_flocons")    // 'null';
+        my $quantite = $self->retrieve_data("quantite_flocons") // '50';
 
         $script_options = qq{
             <script>
@@ -70,18 +87,18 @@ sub opac_js {
                     activation_flocons: "$activation_flocons",
                     vitesse: "$vitesse",
                     taille: "$taille",
-                    vent: "$vent"
-                    quantite_flocons: "$quantite_flocons"
+                    vent: "$vent",
+                    quantite_flocons: "$quantite"
                 };
             </script>
         };
     }
     elsif ($theme eq 'saint-valentin') {
         my $activation_coeurs = $self->retrieve_data("activation_coeurs") // 'on';
-        my $vitesse = $self->retrieve_data("heart_vitesse") // 'normal';
-        my $taille  = $self->retrieve_data("taille_heart")  // 'normal';
-        my $vent    = $self->retrieve_data("vent_heart")    // 'null';
-        my $quantite_coeurs    = $self->retrieve_data("quantite_coeurs")    // '50';
+        my $vitesse = $self->retrieve_data("vitesse_coeurs") // 'normal';
+        my $taille  = $self->retrieve_data("taille_coeurs")  // 'normal';
+        my $vent    = $self->retrieve_data("vent_coeurs")    // 'null';
+        my $quantite = $self->retrieve_data("quantite_coeurs") // '50';
 
         $script_options = qq{
             <script>
@@ -89,11 +106,31 @@ sub opac_js {
                     activation_coeurs: "$activation_coeurs",
                     vitesse: "$vitesse",
                     taille: "$taille",
-                    vent: "$vent"
-                    quantite_coeurs: "$quantite_coeurs"
+                    vent: "$vent",
+                    quantite_coeurs: "$quantite"
                 };
             </script>
         };
+    }
+    elsif ($theme eq 'halloween') {
+        my $activation_spiders = $self->retrieve_data("activation_spiders") // 'on';
+        my $quantite_spiders = $self->retrieve_data("quantite_spiders") // '2';
+        my $activation_ghost = $self->retrieve_data("activation_ghost") // 'on';
+
+          warn "activation_spiders " . $self->retrieve_data("activation_spiders");
+
+        $script_options = qq{
+            <script>
+                window.HalloweenThemeOptions = {
+                    activation_spiders: "$activation_spiders",
+                    quantite_spiders: "$quantite_spiders",
+                    activation_ghost: "$activation_ghost"
+                };
+            </script>
+        };
+    }
+    else {
+        # pas de configuration spécifique
     }
 
     return qq{
@@ -103,33 +140,8 @@ sub opac_js {
 }
 
 
+
 # Enregistre les sélections de theme dans la BD
-# sub apply_theme {
-#     my ($self) = @_; 
-#     my $cgi = $self->{cgi};  
-
-#     my $theme   = $cgi->param('theme');
-#     my $vitesse = $cgi->param('vitesse_flocons');
-#     my $taille  = $cgi->param('taille_flocons');
-#     my $vent    = $cgi->param('vent_flocons');
-
-#     $self->store_data({
-#         selected_theme  => $theme,
-#         vitesse_flocons   => $vitesse,
-#         taille_flocons  => $taille,
-#         vent_flocons    => $vent
-#     }, { flatten => 0 });
-
-#     print $cgi->header('application/json');
-#     print JSON::to_json({
-#         success => JSON::true,
-#         message => "Thème '$theme' appliqué avec succès",
-#         theme   => $theme,
-#         vitesse => $vitesse,
-#         taille  => $taille,
-#     });
-#     print to_json({ success => 1, theme => $theme });
-# }
 sub apply_theme {
     my ($self) = @_; 
     my $cgi = $self->{cgi};  
@@ -138,18 +150,24 @@ sub apply_theme {
     my %data = ( selected_theme => $theme );
 
     if ($theme eq 'noel') {
-        $data{activation_flocons}   = $cgi->param('activation_flocons')  // 'on';
-        $data{vitesse_flocons}   = $cgi->param('vitesse_flocons')  // 'normal';
-        $data{taille_flocons}  = $cgi->param('taille_flocons') // 'normal';
-        $data{vent_flocons}    = $cgi->param('vent_flocons')   // 'null';
-        $data{quantite_flocons}    = $cgi->param('quantite_flocons')   // '50';
+        $data{activation_flocons} = $cgi->param('activation_flocons') // 'on';
+        $data{vitesse_flocons}    = $cgi->param('vitesse_flocons') // 'normal';
+        $data{taille_flocons}     = $cgi->param('taille_flocons') // 'normal';
+        $data{vent_flocons}       = $cgi->param('vent_flocons') // 'null';
+        $data{quantite_flocons}   = $cgi->param('quantite_flocons') // '50';
     }
     elsif ($theme eq 'saint-valentin') {
-        $data{activation_coeurs}   = $cgi->param('activation_coeurs')  // 'on';
-        $data{vitesse_coeurs}   = $cgi->param('vitesse_coeurs')  // 'normal';
-        $data{taille_coeurs}    = $cgi->param('taille_coeurs')   // 'normal';
-        $data{vent_coeurs}      = $cgi->param('vent_coeurs')     // 'null';
-        $data{quantite_coeurs}      = $cgi->param('quantite_coeurs')     // '50';
+        $data{activation_coeurs} = $cgi->param('activation_coeurs') // 'on';
+        $data{vitesse_coeurs}    = $cgi->param('vitesse_coeurs') // 'normal';
+        $data{taille_coeurs}     = $cgi->param('taille_coeurs') // 'normal';
+        $data{vent_coeurs}       = $cgi->param('vent_coeurs') // 'null';
+        $data{quantite_coeurs}   = $cgi->param('quantite_coeurs') // '50';
+    }
+    elsif ($theme eq 'halloween') {
+        $data{activation_spiders} = $cgi->param('activation_spiders') // 'on';
+        $data{quantite_spiders}   = $cgi->param('quantite_spiders') // '2';
+        $data{activation_ghost}   = $cgi->param('activation_ghost') // 'on';
+        # warn "activation_spiders " . $cgi->param('activation_spiders');
     }
 
     $self->store_data(\%data, { flatten => 0 });
@@ -157,6 +175,7 @@ sub apply_theme {
     print $cgi->header('application/json');
     print to_json({ success => JSON::true, theme => $theme });
 }
+
 
 #Sélectionne le bon template de config celon la langue de l'utilisateur
 sub retrieve_template {
@@ -177,8 +196,6 @@ sub retrieve_template {
             };
         }
     }
-
-    # fallback
     $template = $self->get_template({ file => $template_prefix . '.tt' }) unless $template;
 
     return $template;

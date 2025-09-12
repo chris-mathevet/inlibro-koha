@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var vent = options.vent || 'null';   
     var activation = options.activation_coeurs || "on";
     var quantite = parseInt(options.quantite_coeurs) || 10;
-     console.log(vent);
+     console.log(activation);
 
     var vitesseCoeff = 0.1; 
     switch(vitesse) {
@@ -26,16 +26,16 @@ document.addEventListener('DOMContentLoaded', function() {
         case 'normal': ventCoeff = 2; break;
         case 'alot': ventCoeff = 4; break;
     }
-    console.log(ventCoeff);
+    console.log(quantite);
 
-    var Flocon = (function() {
+    var Coeur = (function() {
         var flakes;
         var flakesTotal = quantite;
         var wind = ventCoeff;
         var mouseX = 0;
         var mouseY = 0;
 
-       function Flocon(size, x, y, vx, vy) {
+       function Coeur(size, x, y, vx, vy) {
     this.size = size;
     this.x = x;
     this.y = y;
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
     this.hit = false;
     this.melt = false;
     this.div = document.createElement('div');
-    this.div.classList.add('Flocon');
+    this.div.classList.add('Coeur');
     this.div.style.width = this.size + 'px';
     this.div.style.height = this.size + 'px';
     this.div.style.position = 'fixed';
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
     this.div.style.opacity = '0.9';
 }
 
-        Flocon.prototype.move = function() {
+        Coeur.prototype.move = function() {
             if (this.hit) {
                 if (Math.random() > 0.995) this.melt = true;
             } else {
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
             this.hit = !this.melt && this.y < mouseY && dx * dx + dy * dy < 2400;
         };
 
-        Flocon.prototype.draw = function() {
+        Coeur.prototype.draw = function() {
             this.div.style.transform =
             this.div.style.MozTransform =
             this.div.style.webkitTransform =
@@ -98,11 +98,11 @@ document.addEventListener('DOMContentLoaded', function() {
             requestAnimationFrame(update);
         }
 
-        Flocon.init = function(container) {
+        Coeur.init = function(container) {
             flakes = [];
             for (var i = flakesTotal; i--;) {
                 var size = (Math.random() + 0.2) * tailleCoeff + 1;
-                var flake = new Flocon(
+                var flake = new Coeur(
                     size,
                     Math.random() * window.innerWidth,
                     Math.random() * window.innerHeight,
@@ -120,9 +120,9 @@ document.addEventListener('DOMContentLoaded', function() {
             update();
         };
 
-        return Flocon;
+        return Coeur;
     }());
-    if(activation === "on"){
-         Flocon.init(document.body);
-    }
+    // if(activation === "on"){
+         Coeur.init(document.body);
+    // }
 });

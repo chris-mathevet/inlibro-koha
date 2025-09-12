@@ -3,8 +3,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const noelOptions = document.getElementById('noel-config');
     const valentinOptions = document.getElementById('valentin-config');
+    const halloweenOptions = document.getElementById('halloween-config');
     const toggleNoel = document.getElementById('toggle_noel');
     const toggleStValentin = document.getElementById('toggle_stValentin');
+    const togglehalloween = document.getElementById('toggle_halloween');
 
     const activationFlocons = document.getElementById('activation_flocons');
     const vitesseFlocons = document.getElementById('vitesse_flocons');
@@ -17,6 +19,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const tailleCoeurs = document.getElementById('taille_coeurs');
     const ventCoeurs = document.getElementById('vent_coeurs');
     const quantiteCoeurs = document.getElementById('quantite_coeurs');
+    
+    const activationSpiders = document.getElementById('activation_spiders');
+    const quantiteSpiders = document.getElementById('quantite_spiders');
+    const activationGhost = document.getElementById('activation_ghost');
 
     const successMessage = document.getElementById('success-message');
     const erreurMessage = document.getElementById('erreur-message');
@@ -26,6 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Masquer tous les toggles
     toggleNoel.style.display = 'none';
     toggleStValentin.style.display = 'none';
+    togglehalloween.style.display = 'none';
 
     switch (themeSelect.value) {
         case 'noel':
@@ -34,12 +41,13 @@ document.addEventListener('DOMContentLoaded', function () {
         case 'saint-valentin':
             toggleStValentin.style.display = 'block';
             break;
+        case 'halloween':
+            togglehalloween.style.display = 'block';
+            break;
     }
-
-    // Forcer une mise à jour des configs (recalcul du display en fonction du toggle)
-    // Ça permet de rafraîchir l'affichage si on change de thème
     activationFlocons.dispatchEvent(new Event('change'));
     activationCoeurs.dispatchEvent(new Event('change'));
+    activationSpiders.dispatchEvent(new Event('change'));
 }
 
     updateThemeOptions();
@@ -60,18 +68,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
         switch (theme) {
             case 'noel':
-                formData.append('activation_flocons', activationFlocons.value);
+                formData.append('activation_flocons', activationFlocons.checked ? 'on' : 'off');
                 formData.append('vitesse_flocons', vitesseFlocons.value);
                 formData.append('taille_flocons', tailleFlocons.value);
                 formData.append('vent_flocons', ventFlocons.value);
                 formData.append('quantite_flocons', quantiteFlocons.value);
                 break;
             case 'saint-valentin':
-                formData.append('activation_coeurs', activationCoeurs.value);
+                formData.append('activation_coeurs', activationCoeurs.checked ? 'on' : 'off');
                 formData.append('vitesse_coeurs', vitesseCoeurs.value);
                 formData.append('taille_coeurs', tailleCoeurs.value);
                 formData.append('vent_coeurs', ventCoeurs.value);
                 formData.append('quantite_coeurs', quantiteCoeurs.value);
+                break;
+            case 'halloween':
+                formData.append('activation_spiders', activationSpiders.checked ? 'on' : 'off');
+                formData.append('quantite_spiders', quantiteSpiders.value);
+                formData.append('activation_ghost', activationGhost.checked ? 'on' : 'off');
                 break;
         }
 
@@ -107,6 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 toggleConfig(activationFlocons, noelOptions, 'noel');
 toggleConfig(activationCoeurs, valentinOptions, 'saint-valentin');
+toggleConfig(activationSpiders, halloweenOptions, 'halloween');
 
 // Slider value display
 document.getElementById('quantite_flocons').addEventListener('input', function () {
@@ -114,5 +128,8 @@ document.getElementById('quantite_flocons').addEventListener('input', function (
 });
 document.getElementById('quantite_coeurs').addEventListener('input', function () {
     document.getElementById('val_quantite_coeurs').textContent = this.value;
+});
+document.getElementById('quantite_spiders').addEventListener('input', function () {
+    document.getElementById('val_quantite_spiders').textContent = this.value;
 });
 });
