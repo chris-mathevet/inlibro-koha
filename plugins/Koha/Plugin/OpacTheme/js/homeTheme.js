@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const toggleNoel = document.getElementById('toggle_noel');
     const toggleStValentin = document.getElementById('toggle_stValentin');
     const togglehalloween = document.getElementById('toggle_halloween');
+    const togglefantome = document.getElementById('toggle_halloween2');
+    const togglePaque = document.getElementById('toggle_paque');
 
     const activationFlocons = document.getElementById('activation_flocons');
     const vitesseFlocons = document.getElementById('vitesse_flocons');
@@ -24,6 +26,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const quantiteSpiders = document.getElementById('quantite_spiders');
     const activationGhost = document.getElementById('activation_ghost');
 
+    const activationEggs = document.getElementById('activation_eggs');
+
     const successMessage = document.getElementById('success-message');
     const erreurMessage = document.getElementById('erreur-message');
     const form = document.getElementById('theme-form');
@@ -33,6 +37,8 @@ document.addEventListener('DOMContentLoaded', function () {
     toggleNoel.style.display = 'none';
     toggleStValentin.style.display = 'none';
     togglehalloween.style.display = 'none';
+    togglefantome.style.display = 'none';
+    togglePaque.style.display = 'none';
 
     switch (themeSelect.value) {
         case 'noel':
@@ -43,6 +49,9 @@ document.addEventListener('DOMContentLoaded', function () {
             break;
         case 'halloween':
             togglehalloween.style.display = 'block';
+            togglehalloween.style.display = 'block'; 
+        case 'paque':
+            togglePaque.style.display = 'block';
             break;
     }
     activationFlocons.dispatchEvent(new Event('change'));
@@ -85,6 +94,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 formData.append('activation_spiders', activationSpiders.checked ? 'on' : 'off');
                 formData.append('quantite_spiders', quantiteSpiders.value);
                 formData.append('activation_ghost', activationGhost.checked ? 'on' : 'off');
+                break;  
+            case 'paque':
+                formData.append('activation_eggs', activationEggs.checked ? 'on' : 'off');
                 break;
         }
 

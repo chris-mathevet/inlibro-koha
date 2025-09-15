@@ -7,9 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
     var navbarCollapse = document.querySelector('nav.breadcrumbs');
     const footer = document.querySelector('footer#changelanguage .collapse.navbar-collapse');
 
-//   // 
-//   // SECTION : arraigner, ajout dynamiquement dans le DOM
-//   // 
+  // 
+  // SECTION : arraigner, animation dans le navbar
+  // 
   if (navbarCollapse && activation=== 'on') {
     const numberOfSpiders = quantite; 
     const totalWidthPercent = 60; 
@@ -62,35 +62,34 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   //
-  //  SECTION : Ghost cursor, ajout dynamiquement dans le DOM
+  //  SECTION : Ghost,  suivie du curseur
   //
-   if (ghostEnabled === 'on') {
-        // HTML structure du fantôme
+   if (ghostEnabled === 'on' && window.innerWidth > 768) {
        const ghostHtml = `
-  <div id="ghost" class="ghost">
-      <div class="ghost__head">
-          <div class="ghost__eyes"></div>
-          <div class="ghost__mouth"></div>
-      </div>
-      <div class="ghost__tail">
-          <div class="ghost__rip"></div>
-      </div>
-  </div>
-  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="ghost-filter"
-       style="position: absolute; width: 0; height: 0; overflow: hidden; z-index: -1; pointer-events: none;">
-      <defs>
-          <filter id="goo">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="ghost-blur" />
-              <feColorMatrix in="ghost-blur" mode="matrix"
-                  values="1 0 0 0 0
-                          0 1 0 0 0
-                          0 0 1 0 0
-                          0 0 0 16 -7"
-                  result="ghost-gooey" />
-          </filter>
-      </defs>
-  </svg>
-`;
+        <div id="ghost" class="ghost">
+            <div class="ghost__head">
+                <div class="ghost__eyes"></div>
+                <div class="ghost__mouth"></div>
+            </div>
+            <div class="ghost__tail">
+                <div class="ghost__rip"></div>
+            </div>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="ghost-filter"
+            style="position: absolute; width: 0; height: 0; overflow: hidden; z-index: -1; pointer-events: none;">
+            <defs>
+                <filter id="goo">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="ghost-blur" />
+                    <feColorMatrix in="ghost-blur" mode="matrix"
+                        values="1 0 0 0 0
+                                0 1 0 0 0
+                                0 0 1 0 0
+                                0 0 0 16 -7"
+                        result="ghost-gooey" />
+                </filter>
+            </defs>
+        </svg>
+      `;
         document.body.insertAdjacentHTML('beforeend', ghostHtml);
         loadGhostCursor();
     }
@@ -105,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             mouse = {
                 x: clientX,
-                y: clientY + window.scrollY, // 🟢 Ajout important ici !
+                y: clientY + window.scrollY, 
                 dir: (getMouse.x > clientX) ? 'left' : 'right'
             };
         };
@@ -174,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
   // 
-  // SECTION : witch brew, ajout dynamiquement dans le DOM
+  // SECTION : witch brew pour footer
   // 
   if (footer) {
     const witchBrewHTML = `
@@ -249,70 +248,70 @@ document.addEventListener('DOMContentLoaded', function() {
 
     footer.insertAdjacentHTML('beforeend', witchBrewHTML);
   }
-function setupBubbleAnimations() {
-  const blueBubbles = document.querySelector('#bubbles-blue');
-  const greenBubbles = document.querySelector('#bubbles-green');
-  const redBubbles = document.querySelector('#bubbles-red');
-  const blueBubble = document.querySelector('#bubble-blue');
-  const redBubble = document.querySelector('#bubble-red');
-  const greenBubble = document.querySelector('#bubble-green');
-  const blueBubbleSmall = document.querySelector('#bubble-blue-small');
-  const redBubbleSmall = document.querySelector('#bubble-red-small');
-  const greenBubbleSmall = document.querySelector('#bubble-green-small');
-  const dripRed = document.querySelector('#drip-red');
-  const dripGreen = document.querySelector('#drip-green');
+  function setupBubbleAnimations() {
+    const blueBubbles = document.querySelector('#bubbles-blue');
+    const greenBubbles = document.querySelector('#bubbles-green');
+    const redBubbles = document.querySelector('#bubbles-red');
+    const blueBubble = document.querySelector('#bubble-blue');
+    const redBubble = document.querySelector('#bubble-red');
+    const greenBubble = document.querySelector('#bubble-green');
+    const blueBubbleSmall = document.querySelector('#bubble-blue-small');
+    const redBubbleSmall = document.querySelector('#bubble-red-small');
+    const greenBubbleSmall = document.querySelector('#bubble-green-small');
+    const dripRed = document.querySelector('#drip-red');
+    const dripGreen = document.querySelector('#drip-green');
 
-  if (!blueBubble || !redBubble || !greenBubble) return;
+    if (!blueBubble || !redBubble || !greenBubble) return;
 
-  // Ajouter classes pour animer les bulles
-  blueBubble.classList.add('bubble', 'bubble--blue');
-  greenBubble.classList.add('bubble', 'bubble--green');
-  redBubble.classList.add('bubble', 'bubble--red');
+    // Ajouter classes pour animer les bulles
+    blueBubble.classList.add('bubble', 'bubble--blue');
+    greenBubble.classList.add('bubble', 'bubble--green');
+    redBubble.classList.add('bubble', 'bubble--red');
 
-  blueBubbleSmall.classList.add('bubble', 'bubble--blue', 'bubble--small');
-  greenBubbleSmall.classList.add('bubble', 'bubble--green', 'bubble--small');
-  redBubbleSmall.classList.add('bubble', 'bubble--red', 'bubble--small');
+    blueBubbleSmall.classList.add('bubble', 'bubble--blue', 'bubble--small');
+    greenBubbleSmall.classList.add('bubble', 'bubble--green', 'bubble--small');
+    redBubbleSmall.classList.add('bubble', 'bubble--red', 'bubble--small');
 
-  // Ajouter classe pour faire flotter les groupes de bulles
-  blueBubbles?.classList.add('bubble-group');
-  greenBubbles?.classList.add('bubble-group');
-  redBubbles?.classList.add('bubble-group');
+    // Ajouter classe pour faire flotter les groupes de bulles
+    blueBubbles?.classList.add('bubble-group');
+    greenBubbles?.classList.add('bubble-group');
+    redBubbles?.classList.add('bubble-group');
 
-  // Ajouter classes d’animation pour les gouttes
-  dripRed?.classList.add('drip', 'drip--red');
-  dripGreen?.classList.add('drip', 'drip--green');
-}
-setupBubbleAnimations();
+    // Ajouter classes d’animation pour les gouttes
+    dripRed?.classList.add('drip', 'drip--red');
+    dripGreen?.classList.add('drip', 'drip--green');
+  }
+  setupBubbleAnimations();
 
   // 
-  // SECTION : citrouillew, ajout dynamiquement dans le DOM
+  // SECTION : citrouillew, pour le footer
   // 
   function getPumpkinHTML(id) {
-  return `
-    <div class="container" id="${id}">
-      <div class="stem-container">
-        <div class="stem"></div>
+    return `
+      <div class="container" id="${id}">
+        <div class="stem-container">
+          <div class="stem"></div>
+        </div>
+        <div class="slice one"></div>
+        <div class="slice two"></div>
+        <div class="slice tree"></div>
+        <div class="slice four"></div>
+        <div class="slice five"></div>
+        <div class="eyes">
+          <div class="eye left-eye"></div>
+          <div class="eye right-eye"></div>
+        </div>
+        <div class="nose"></div>
+        <div class="mouth">
+          <div class="tooth"></div>
+          <div class="tooth tooth2"></div>
+          <div class="tooth tooth3"></div>
+          <div class="tooth tooth4"></div>
+          <div class="tooth tooth5"></div>
+        </div>
       </div>
-      <div class="slice one"></div>
-      <div class="slice two"></div>
-      <div class="slice tree"></div>
-      <div class="slice four"></div>
-      <div class="slice five"></div>
-      <div class="eyes">
-        <div class="eye left-eye"></div>
-        <div class="eye right-eye"></div>
-      </div>
-      <div class="nose"></div>
-      <div class="mouth">
-        <div class="tooth"></div>
-        <div class="tooth tooth2"></div>
-        <div class="tooth tooth3"></div>
-        <div class="tooth tooth4"></div>
-        <div class="tooth tooth5"></div>
-      </div>
-    </div>
-  `;
-}
+    `;
+  }
   if (footer) {
     footer.insertAdjacentHTML('beforeend', getPumpkinHTML('pumpkin-left'));
     footer.insertAdjacentHTML('beforeend', getPumpkinHTML('pumpkin-right'));

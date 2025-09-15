@@ -148,13 +148,25 @@
                             <span id="val_quantite_spiders" class="range-value">[% quantite_spiders || 6 %]</span>
                         </div>
                     <br><br>
-                    <div class="toggle-container" id="toggle_halloween2">
+                    </div>
+                    <div class="toggle-container" id="toggle_halloween2" style="display: none;">
                         <label class="switch">
                             <input type="checkbox" id="activation_ghost" name="activation_ghost" [% IF activation_ghost %]checked[% END %]>
                             <span class="slider round"></span>
                         </label>
                         <span class="toggle-label"> Activer le fantôme du curseurt</span>
                     </div>
+                </div>
+
+                
+
+                 <div id="paque-options" class="form-group">
+                    <div class="toggle-container" id="toggle_paque" style="display: none;">
+                        <label class="switch">
+                            <input type="checkbox" id="activation_eggs" name="activation_eggs" [% IF activation_eggs %]checked[% END %]>
+                            <span class="slider round"></span>
+                        </label>
+                        <span class="toggle-label">Enable eggs cursor animation effect</span>
                     </div>
                 </div>
 
