@@ -295,3 +295,7 @@ breadcrumb a,
     border: 2px solid #2c8d2c; 
     outline: none; 
 }
+
+#wrapper {
+  margin-bottom: 10px;
+}

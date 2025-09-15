@@ -407,6 +407,57 @@
       }
     }
   },
+    "/js/paque.js": {
+    "get": {
+      "x-mojo-to": "Static#get",
+      "operationId": "KohaPluginPaqueTheme_staticGetJSPaque",
+      "tags": ["pluginStatic"],
+      "responses": {
+        "200": {
+          "description": "JS OK",
+          "schema": {
+            "type": "file"
+          }
+        },
+        "400": {
+          "description": "Bad request",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "File not found",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
    "/images/inLibro_en.svg": {
     "get": {
       "x-mojo-to": "Static#get",
@@ -464,6 +515,218 @@
     "get": {
       "x-mojo-to": "Static#get",
       "operationId": "KohaPluginNoelTheme_staticGetImageInlibro_fr",
+      "tags": [
+        "pluginStatic"
+      ],
+      "responses": {
+        "200": {
+          "description": "File found",
+          "schema": {
+            "type": "file"
+          }
+        },
+        "400": {
+          "description": "Bad request",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "File not found",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+    "/images/blue-easter-egg.png": {
+    "get": {
+      "x-mojo-to": "Static#get",
+      "operationId": "KohaPluginPaqueTheme_staticGetImage_blueEasterEgg",
+      "tags": [
+        "pluginStatic"
+      ],
+      "responses": {
+        "200": {
+          "description": "File found",
+          "schema": {
+            "type": "file"
+          }
+        },
+        "400": {
+          "description": "Bad request",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "File not found",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+    "/images/gold-easter-egg.png": {
+    "get": {
+      "x-mojo-to": "Static#get",
+      "operationId": "KohaPluginPaqueTheme_staticGetImage_goldEasterEgg",
+      "tags": [
+        "pluginStatic"
+      ],
+      "responses": {
+        "200": {
+          "description": "File found",
+          "schema": {
+            "type": "file"
+          }
+        },
+        "400": {
+          "description": "Bad request",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "File not found",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+    "/images/pink-easter-egg.png": {
+    "get": {
+      "x-mojo-to": "Static#get",
+      "operationId": "KohaPluginPaqueTheme_staticGetImage_pinkEasterEgg",
+      "tags": [
+        "pluginStatic"
+      ],
+      "responses": {
+        "200": {
+          "description": "File found",
+          "schema": {
+            "type": "file"
+          }
+        },
+        "400": {
+          "description": "Bad request",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "File not found",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+    "/images/purple-easter-egg.png": {
+    "get": {
+      "x-mojo-to": "Static#get",
+      "operationId": "KohaPluginPaqueTheme_staticGetImage_PurpleEasterEgg",
       "tags": [
         "pluginStatic"
       ],

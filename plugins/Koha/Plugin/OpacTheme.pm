@@ -11,14 +11,15 @@ use File::Basename;
 use Cwd 'abs_path';
 # use feature 'switch'
 
-our $VERSION = '1.0';
+our $VERSION = '0.9';
 our $metadata = {
     name   => 'OpacTheme',
     author => 'Ludovic Julien',
-    description => 'Ajouter des themes saisonnier dans l’OPAC',
+    description => 'Add seasonal themes to the OPAC.',
     date_authored => '2025-09-09',
+    date_updated    => '2025-09-15',
     version => $VERSION,
-    minimum_version => '22.05.00',
+    minimum_version => '24.05',
 };
 
 sub new {
@@ -117,14 +118,23 @@ sub opac_js {
         my $quantite_spiders = $self->retrieve_data("quantite_spiders") // '2';
         my $activation_ghost = $self->retrieve_data("activation_ghost") // 'on';
 
-          warn "activation_spiders " . $self->retrieve_data("activation_spiders");
-
         $script_options = qq{
             <script>
                 window.HalloweenThemeOptions = {
                     activation_spiders: "$activation_spiders",
                     quantite_spiders: "$quantite_spiders",
                     activation_ghost: "$activation_ghost"
+                };
+            </script>
+        };
+    }
+    elsif ($theme eq 'paque') {
+        my $activation_eggs = $self->retrieve_data("activation_eggs") // 'on';
+
+        $script_options = qq{
+            <script>
+                window.PaqueThemeOptions = {
+                    activation_eggs: "$activation_eggs"
                 };
             </script>
         };
@@ -167,7 +177,9 @@ sub apply_theme {
         $data{activation_spiders} = $cgi->param('activation_spiders') // 'on';
         $data{quantite_spiders}   = $cgi->param('quantite_spiders') // '2';
         $data{activation_ghost}   = $cgi->param('activation_ghost') // 'on';
-        # warn "activation_spiders " . $cgi->param('activation_spiders');
+    }
+    elsif ($theme eq 'paque') {
+        $data{activation_eggs} = $cgi->param('activation_eggs') // 'on';
     }
 
     $self->store_data(\%data, { flatten => 0 });
