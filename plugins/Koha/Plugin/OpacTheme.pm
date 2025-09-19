@@ -252,29 +252,29 @@ sub tool {
 sub uninstall {
     my ( $self, $args ) = @_;
     my $dbh = C4::Context->dbh;
-    my $sth_select = $dbh->prepare("SELECT value FROM systempreferences WHERE variable = 'OpacMainUserBlock'");
+    my $sth_select = $dbh->prepare("SELECT * FROM systempreferences WHERE variable = 'OpacMainUserBlock'");
     $sth_select->execute();
 
     my $value;
     if (my $row = $sth_select->fetchrow_hashref) {
-        $value = $row->{value};
+        $value = "$row->{'value'}";
     }
 
     my $start_tag = "<!-- Debut plugin noel -->";
     my $end_tag   = "<!-- Fin plugin noel -->";
 
-    if ($value && $value =~ /$start_tag.*?$end_tag/s) {
+    # if ($value && $value =~ /$start_tag.*?$end_tag/s) {
         $value =~ s/$start_tag.*?$end_tag//s;
 
         my $sth_update = $dbh->prepare("UPDATE systempreferences SET value = ? WHERE variable = 'OpacMainUserBlock'");
         $sth_update->bind_param(1, $value);
         $sth_update->execute;
         $sth_update->finish;
-    }
+    # }
 
-    my $sth_delete = $dbh->prepare("DELETE FROM plugin_data WHERE plugin_class = ?");
-    $sth_delete->execute($self->class());
-    $sth_delete->finish;
+    # my $sth_delete = $dbh->prepare("DELETE FROM plugin_data WHERE plugin_class = ?");
+    # $sth_delete->execute($self->class());
+    # $sth_delete->finish;
 
     $sth_select->finish;
 
