@@ -53,8 +53,6 @@ sub tool {
 
 sub PageResult {
     my ( $self, $args ) = @_;
-    my $cgi      = $self->{'cgi'};
-    my $locale = $cgi->cookie('KohaOpacLanguage');
 
     # Execute the script and capture the output
     my $path = C4::Context->config("intranetdir") . "/misc/cronjobs/check-url-quick.pl --html --host ' '";
@@ -72,8 +70,6 @@ sub PageResult {
 
 sub PageHome {
     my ( $self, $args ) = @_;
-    my $cgi    = $self->{'cgi'};
-    my $locale = $cgi->cookie('KohaOpacLanguage');
 
     my $template = $self->get_template( { file => 'home.tt' } );
 
