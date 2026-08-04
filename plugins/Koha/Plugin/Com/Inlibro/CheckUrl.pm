@@ -60,25 +60,13 @@ sub PageResult {
     my $path = C4::Context->config("intranetdir") . "/misc/cronjobs/check-url-quick.pl --html --host ' '";
     my $script_output = qx($path);
 
-    # Find locale-appropriate template
-    my $template = undef;
-    eval {
-        $template =
-          $self->get_template( { file => "result_" . $locale . ".tt" } );
-    };
-    if ( !$template ) {
-        $locale = substr $locale, 0, 2;
-        eval {
-            $template = $self->get_template( { file => "result_$locale.tt" } );
-        };
-    }
-    $template = $self->get_template( { file => 'result.tt' } ) unless $template;
+    my $template = $self->get_template( { file => 'result.tt' } );
 
     # Pass the script output to the template
     $template->param( script_output => $script_output );
 
-    print $cgi->header( -type => 'text/html', -charset => 'utf-8' );
-    print $template->output();
+    $self->output_html($template->output());
+    return;
 }
 
 
@@ -87,21 +75,10 @@ sub PageHome {
     my $cgi    = $self->{'cgi'};
     my $locale = $cgi->cookie('KohaOpacLanguage');
 
-    # Find locale-appropriate template
-    my $template = undef;
-    eval {
-        $template =
-          $self->get_template( { file => "home_" . $locale . ".tt" } );
-    };
-    if ( !$template ) {
-        $locale = substr $locale, 0, 2;
-        eval {
-            $template = $self->get_template( { file => "home_$locale.tt" } );
-        };
-    }
-    $template = $self->get_template( { file => 'home.tt' } ) unless $template;
-    print $cgi->header( -type => 'text/html', -charset => 'utf-8' );
-    print $template->output();
+    my $template = $self->get_template( { file => 'home.tt' } );
+
+    $self->output_html($template->output());
+    return;
 }
 
 #Supprimer le plugin avec toutes ses données
